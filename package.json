@@ -67,7 +67,5 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "module": "index.ts",
-  "type": "module"
+  }
 }
