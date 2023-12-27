@@ -1,5 +1,5 @@
 {
-  "name": "command",
+  "name": "cy-command",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -25,9 +25,9 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
     "reflect-metadata": "^0.1.13",
-    "rilata2": "git@github.com:soul-workshop/rilata2.git",
+    "rilata": "git@github.com:craftyard/rilata-core.git",
     "rxjs": "^7.8.1",
-    "workshop-domain": "git@github.com:soul-workshop/domain"
+    "cy-domain": "git@github.com:craftyard/domain"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
