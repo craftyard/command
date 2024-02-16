@@ -24,10 +24,13 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
-    "reflect-metadata": "^0.1.13",
+    "@nestjs/typeorm": "^10.0.2",
+    "cy-domain": "git@github.com:craftyard/domain",
+    "reflect-metadata": "^0.2.1",
     "rilata": "git@github.com:craftyard/rilata-core.git",
     "rxjs": "^7.8.1",
-    "cy-domain": "git@github.com:craftyard/domain"
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
