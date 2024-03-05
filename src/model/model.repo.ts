@@ -1,39 +1,52 @@
-import { Logger } from 'rilata/src/common/logger/logger';
-import { ModelCmdRepository } from 'cy-domain/src/model/cmd-repository';
-import { ModelNameAlreadyExistsError } from 'cy-domain/src/model/domain-data/a-params';
-import { ModelAR } from 'cy-domain/src/model/domain-object/a-root';
-import { Result } from 'rilata/src/common/result/types';
-import { ModelAttrs } from 'cy-domain/src/model/domain-data/params';
-import { AssertionException } from 'rilata/src/common/exeptions';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ModelNameAlreadyExistsError } from 'cy-domain/src/model/domain-data/model/add-model/s-params';
+import { ModelAR } from 'cy-domain/src/model/domain-object/model/a-root';
+import { ModelCmdRepository } from 'cy-domain/src/model/domain-object/model/cmd-repository';
+import { Result } from 'rilata/src/common/result/types';
 import { success } from 'rilata/src/common/result/success';
-import { Model } from './model.entity';
-
-// type ModelRecord = ModelAttrs & { version: number };
-// private modelRecords: ModelRecord[];
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Repository } from 'typeorm';
+import { failure } from 'rilata/src/common/result/failure';
+import { Logger } from 'rilata/src/common/logger/logger';
+import { ModelEntity } from './model.entity';
 
 export class ModelCMDRepository implements ModelCmdRepository {
+  // eslint-disable-next-line no-useless-constructor
   constructor(
-    @InjectRepository(Model)
-    private modelRepository: Repository<Model>,
-    private logger: Logger,
+        @InjectRepository(ModelEntity)
+        private modelRepository: Repository<ModelEntity>,
+        private logger: Logger,
+  // eslint-disable-next-line no-empty-function
   ) {}
 
   async addModel(model: ModelAR): Promise<Result<ModelNameAlreadyExistsError, undefined>> {
     const models = model.getAttrs();
-    const nameExists = await this.modelRepository.findOne({ where: { modelName: models.name } });
+    const nameExist = await this.modelRepository.findOne(
+      { where: { modelName: models.name } && { workshopId: models.workshopId } },
+    );
 
-    if (nameExists) {
-      const errStr = `Имя модели ${models.name} уже существует в вашей мастерской`;
-      this.logger.error(errStr);
-      throw new AssertionException(errStr);
+    if (nameExist) {
+      const err = `Имя модели ${models.name} уже существует в вашей мастерской`;
+      this.logger.error(err);
+      return failure({
+        locale: {
+          text: 'Имя модели {{modelName}} уже существует в вашей мастерской',
+          hint: { modelName: models.name },
+        },
+        name: 'ModelNameAlreadyExistsError',
+        meta: {
+          domainType: 'error',
+          errorType: 'domain-error',
+        },
+      });
     }
-    const newModel = new Model();
+
+    const newModel = new ModelEntity();
     newModel.modelId = models.modelId;
-    newModel.workshopId = models.workshopId;
     newModel.modelName = models.name;
+    newModel.workshopId = models.workshopId;
     newModel.category = models.category;
+    newModel.images = models.images;
 
     await this.modelRepository.save(newModel);
 

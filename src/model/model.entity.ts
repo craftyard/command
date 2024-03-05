@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class Model {
+export class ModelEntity {
   @PrimaryColumn('uuid')
     modelId: string;
 
@@ -13,4 +14,7 @@ export class Model {
 
   @Column({ length: 50 })
     category: string;
+
+  @Column()
+    images: string[];
 }

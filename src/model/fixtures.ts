@@ -1,28 +1,65 @@
-import { ModelCmdRepository } from 'cy-domain/src/model/cmd-repository';
-import { ModelNameAlreadyExistsError } from 'cy-domain/src/model/domain-data/a-params';
-import { ModelAR } from 'cy-domain/src/model/domain-object/a-root';
-import { Result } from 'rilata/src/common/result/types';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 import { ModuleResolver } from 'rilata/src/app/resolves/module-resolver';
-import { TestResolverMock } from 'rilata/tests/fixtures/test-resolver-mock';
-import { Mock, spyOn } from 'bun:test';
-import { ModelAttrs } from 'cy-domain/src/model/domain-data/params';
+import { Database } from 'rilata/src/app/database/database';
+import { Module } from 'rilata/src/app/module/module';
+import { RunMode } from 'rilata/src/app/types';
+import { Logger } from 'rilata/src/common/logger/logger';
+import { ModelActionDOD } from 'cy-domain/src/model/domain-data/model/add-model/s-params';
+import { TypeormTestFixtures } from '../typeorm/fixture';
+import { TypeormDatabase } from '../typeorm/database';
+import { ModelEntity } from './model.entity';
 
-export class ModelRepoMock implements ModelCmdRepository {
-  addModel(model: ModelAR): Promise<Result<ModelNameAlreadyExistsError, undefined>> {
+const dataSourceOptions: SqliteConnectionOptions = {
+  type: 'sqlite',
+  database: ':memory:',
+  synchronize: true,
+  entities: [ModelEntity],
+};
+
+export const typeormDatabase = new TypeormDatabase(
+  dataSourceOptions,
+  new TypeormTestFixtures.ResolverMock(),
+);
+
+export const Model: ModelActionDOD = {
+  meta: {
+    name: 'addModel',
+    actionId: '',
+    domainType: 'action',
+  },
+  attrs: {
+    name: '',
+    category: '',
+    workshopId: '',
+  },
+};
+
+export class ModuleResolverMock implements ModuleResolver {
+  init(module: Module): void {
+    throw new Error('Method not implemented.');
+  }
+
+  getRunMode(): RunMode {
+    throw new Error('Method not implemented.');
+  }
+
+  getModule(): Module {
+    throw new Error('Method not implemented.');
+  }
+
+  getLogger(): Logger {
+    throw new Error('Method not implemented.');
+  }
+
+  getRepository(...args: unknown[]): unknown {
+    throw new Error('Method not implemented.');
+  }
+
+  getDatabase(): Database {
+    throw new Error('Method not implemented.');
+  }
+
+  getRealisation(...args: unknown[]): unknown {
     throw new Error('Method not implemented.');
   }
 }
-
-export const resolver: ModuleResolver = new TestResolverMock();
-
-export const resolverGetRepoMock = spyOn(
-  resolver,
-  'commandRepository',
-).mockReturnValue(new ModelRepoMock()) as Mock<(...args: unknown[]) => ModelRepoMock>;
-
-export const model: (ModelAttrs) = {
-  modelId: '977e597e-bce9-4b6e-b804-1f627da539f7',
-  workshopId: 'a46f5705-2d5e-4de0-bf9d-fa573444100c',
-  name: 'Мастерская у Набережной Чагана',
-  category: 'Мебель',
-};
