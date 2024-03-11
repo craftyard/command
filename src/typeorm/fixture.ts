@@ -13,6 +13,7 @@ import { Logger } from 'rilata/src/common/logger/logger';
 import { DTO } from 'rilata/src/domain/dto';
 import { ConsoleLogger } from 'rilata/src/common/logger/console-logger';
 import { RunMode } from 'rilata/src/app/types';
+// eslint-disable-next-line import/extensions
 import { TypeormDatabase } from './database';
 
 export namespace TypeormTestFixtures {

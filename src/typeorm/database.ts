@@ -19,9 +19,11 @@ export class TypeormDatabase implements Database {
 
   protected queryRunners: Map<UuidType, QueryRunner> = new Map();
 
+  // eslint-disable-next-line no-useless-constructor
   constructor(
     protected dataSourceOptions: DataSourceOptions,
     protected resolver: ModuleResolver,
+  // eslint-disable-next-line no-empty-function
   ) {}
 
   async init(): Promise<void> {

@@ -5,8 +5,8 @@ import { Module } from 'rilata/src/app/module/module';
 import { RunMode } from 'rilata/src/app/types';
 import { Logger } from 'rilata/src/common/logger/logger';
 import { ModelActionDOD } from 'cy-domain/src/model/domain-data/model/add-model/s-params';
-import { TypeormTestFixtures } from '../typeorm/fixture';
-import { TypeormDatabase } from '../typeorm/database';
+import { TypeormTestFixtures } from 'src/typeorm/fixture';
+import { TypeormDatabase } from 'src/typeorm/database';
 import { ModelEntity } from './model.entity';
 
 const dataSourceOptions: SqliteConnectionOptions = {
@@ -28,10 +28,18 @@ export const Model: ModelActionDOD = {
     domainType: 'action',
   },
   attrs: {
-    name: '',
-    category: '',
-    workshopId: '',
+    name: 'Стол ЛИННМОН/АДИЛЬС 60х100 белый',
+    category: 'Мебель',
+    workshopId: 'a46f5705-2d5e-4de0-bf9d-fa573444100c',
   },
+};
+
+export const model = {
+  modelId: '977e597e-bce9-4b6e-b804-1f627da539f7',
+  workshopId: 'a46f5705-2d5e-4de0-bf9d-fa573444100c',
+  name: 'Стол ЛИННМОН/АДИЛЬС 60х100 белый',
+  category: 'Мебель',
+  images: [],
 };
 
 export class ModuleResolverMock implements ModuleResolver {

@@ -27,7 +27,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "cy-domain": "craftyard/domain",
     "reflect-metadata": "^0.2.1",
-    "rilata": "craftyard/rilata-core",
+    "rilata": "git@github.com:craftyard/rilata-core.git",
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20"
