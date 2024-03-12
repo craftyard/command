@@ -54,19 +54,19 @@ export namespace TypeormTestFixtures {
     @Entity()
     export class ModelEntity {
       @PrimaryColumn('uuid')
-        modelId: string;
+        modelId: string | undefined;
 
       @Column('uuid')
-        workshopId: string;
+        workshopId: string | undefined;
 
       @Column({ unique: true })
-        modelName: string;
+        modelName: string | undefined;
 
       @Column()
-        category: string;
+        category: string | undefined;
 
       @Column()
-        images: string;
+        images: string | undefined;
     }
 
     @Entity()

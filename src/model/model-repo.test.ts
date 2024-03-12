@@ -5,11 +5,11 @@ import {
 } from 'bun:test';
 import { AddModelDomainCommand } from 'cy-domain/src/model/domain-data/model/add-model/a-params';
 import { DomainUser } from 'rilata/src/app/caller';
-import { ModelTypeormTestFixtures as fixtures} from 'src/model/fixtures';
-import { ModelEntity } from 'src/model/model.entity';
-import { ModelCMDRepository } from 'src/model/model.repo';
 import { ModelFactory } from 'cy-domain/src/model/domain-object/model/factory';
 import { ConsoleLogger } from 'rilata/src/common/logger/console-logger';
+import { ModelCMDRepository } from '../../src/model/model.repo';
+import { ModelEntity } from '../../src/model/model.entity';
+import { ModelTypeormTestFixtures as fixtures } from '../model/fixtures';
 
 const modelCmdRepo = new ModelCMDRepository(fixtures.typeormDatabase, new ConsoleLogger());
 // let globalUnitOfWorkId: string;

@@ -5,6 +5,7 @@ import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionO
 import { ModuleResolver } from 'rilata/src/app/resolves/module-resolver';
 import { Database } from 'rilata/src/app/database/database';
 import { Module } from 'rilata/src/app/module/module';
+import { ConsoleLogger } from 'rilata/src/common/logger/console-logger';
 import { RunMode } from 'rilata/src/app/types';
 import { Logger } from 'rilata/src/common/logger/logger';
 import {
@@ -13,7 +14,6 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { DTO } from 'rilata/src/domain/dto';
-import { ConsoleLogger } from '@nestjs/common';
 import { TokenVerifier } from 'rilata/src/app/jwt/token-verifier.interface';
 import { TypeormDatabase } from '../../src/typeorm/database';
 
@@ -56,19 +56,19 @@ export namespace ModelTypeormTestFixtures {
   @Entity()
   export class ModelEntity {
     @PrimaryColumn('uuid')
-      modelId: string;
+      modelId: string | undefined;
 
     @Column('uuid')
-      workshopId: string;
+      workshopId: string | undefined;
 
     @Column({ unique: true })
-      modelName: string;
+      modelName: string | undefined;
 
     @Column()
-      category: string;
+      category: string | undefined;
 
     @Column()
-      images: string;
+      images: string | undefined;
   }
 
     const dataSourceOptions: SqliteConnectionOptions = {

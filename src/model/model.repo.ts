@@ -6,8 +6,8 @@ import { Result } from 'rilata/src/common/result/types';
 import { success } from 'rilata/src/common/result/success';
 import { failure } from 'rilata/src/common/result/failure';
 import { Logger } from 'rilata/src/common/logger/logger';
-import { TypeormDatabase } from 'src/typeorm/database';
 import { storeDispatcher } from 'rilata/src/app/async-store/store-dispatcher';
+import { TypeormDatabase } from '../typeorm/database';
 import { ModelEntity } from './model.entity';
 
 export class ModelCMDRepository implements ModelCmdRepository {
