@@ -1,20 +1,27 @@
+import {
+  describe,
+  expect,
+  test,
+  beforeAll,
+  beforeEach,
+  afterEach,
+} from 'bun:test';
 import { AddModelDomainCommand } from 'cy-domain/src/model/domain-data/model/add-model/a-params';
-import { ModelFactory } from 'cy-domain/src/model/domain-object/model/factory';
-import { storeDispatcher } from 'rilata/src/app/async-store/store-dispatcher';
-import { StorePayload } from 'rilata/src/app/async-store/types';
 import { DomainUser } from 'rilata/src/app/caller';
-import { ConsoleLogger } from 'rilata/src/common/logger/console-logger';
 import { ModuleResolverMock, typeormDatabase } from 'src/model/fixtures';
 import { ModelEntity } from 'src/model/model.entity';
 import { ModelCMDRepository } from 'src/model/model.repo';
+import { ModelFactory } from 'cy-domain/src/model/domain-object/model/factory';
+import { ConsoleLogger } from 'rilata/src/common/logger/console-logger';
+import { storeDispatcher } from 'rilata/src/app/async-store/store-dispatcher';
+import { StorePayload } from 'rilata/src/app/async-store/types';
 
 let modelCmdRepo: ModelCMDRepository;
 let globalUnitOfWorkId: string;
-const logger = new ConsoleLogger();
 
 beforeAll(async () => {
   await typeormDatabase.init();
-  modelCmdRepo = new ModelCMDRepository(typeormDatabase, logger);
+  modelCmdRepo = new ModelCMDRepository(typeormDatabase, new ConsoleLogger());
 });
 
 beforeEach(async () => {
@@ -29,7 +36,7 @@ beforeEach(async () => {
         moduleResolver: new ModuleResolverMock(),
         caller: {
           type: 'ModuleCaller',
-          name: 'ModelModule',
+          name: 'SubjectModule',
           user: {
             type: 'AnonymousUser',
           },
@@ -60,8 +67,7 @@ const modelCmd: AddModelDomainCommand = {
 
 const actionid = '977e597e-bce9-4b6e-b804-1f627da539f7';
 
-const modelFactory = new ModelFactory(logger);
-const modelAr = modelFactory.create(user, modelCmd, actionid);
+const modelAr = new ModelFactory(new ConsoleLogger()).create(user, modelCmd, actionid);
 
 describe('ModelCMDRepository tests', () => {
   describe('Тесты при добавлении модели', () => {

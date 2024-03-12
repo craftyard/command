@@ -1,6 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
+/* eslint-disable max-classes-per-file */
+import {
+  beforeEach,
+  describe,
+  request,
+  it,
+  Test,
+  TestingModule,
+} from 'bun:test';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
 describe('AppController (e2e)', () => {

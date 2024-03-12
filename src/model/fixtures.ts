@@ -1,73 +1,103 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable max-classes-per-file */
 import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
 import { ModuleResolver } from 'rilata/src/app/resolves/module-resolver';
 import { Database } from 'rilata/src/app/database/database';
 import { Module } from 'rilata/src/app/module/module';
 import { RunMode } from 'rilata/src/app/types';
 import { Logger } from 'rilata/src/common/logger/logger';
-import { ModelActionDOD } from 'cy-domain/src/model/domain-data/model/add-model/s-params';
-import { TypeormTestFixtures } from 'src/typeorm/fixture';
 import { TypeormDatabase } from 'src/typeorm/database';
-import { ModelEntity } from './model.entity';
+import {
+  Column,
+  Entity,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { DTO } from 'rilata/src/domain/dto';
+import { ConsoleLogger } from '@nestjs/common';
+import { TokenVerifier } from 'rilata/src/app/jwt/token-verifier.interface';
 
-const dataSourceOptions: SqliteConnectionOptions = {
-  type: 'sqlite',
-  database: ':memory:',
-  synchronize: true,
-  entities: [ModelEntity],
-};
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace ModelTypeormTestFixtures {
+  export class ResolverMock implements ModuleResolver {
+    getRealisation(...args: unknown[]): unknown {
+      throw new Error('Method not implemented.');
+    }
 
-export const typeormDatabase = new TypeormDatabase(
-  dataSourceOptions,
-  new TypeormTestFixtures.ResolverMock(),
-);
+    getRunMode(): RunMode {
+      return 'test';
+    }
 
-export const Model: ModelActionDOD = {
-  meta: {
-    name: 'addModel',
-    actionId: '',
-    domainType: 'action',
-  },
-  attrs: {
-    name: 'Стол ЛИННМОН/АДИЛЬС 60х100 белый',
-    category: 'Мебель',
-    workshopId: 'a46f5705-2d5e-4de0-bf9d-fa573444100c',
-  },
-};
+    init(module: Module): void {
+      throw new Error('Method not implemented.');
+    }
 
-export const model = {
-  modelId: '977e597e-bce9-4b6e-b804-1f627da539f7',
-  workshopId: 'a46f5705-2d5e-4de0-bf9d-fa573444100c',
-  name: 'Стол ЛИННМОН/АДИЛЬС 60х100 белый',
-  category: 'Мебель',
-  images: [],
-};
+    getTokenVerifier(): TokenVerifier<DTO> {
+      throw new Error('Method not implemented.');
+    }
 
-export class ModuleResolverMock implements ModuleResolver {
-  init(module: Module): void {
-    throw new Error('Method not implemented.');
+    getModule(): Module {
+      throw new Error('Method not implemented.');
+    }
+
+    getLogger(): Logger {
+      return new ConsoleLogger();
+    }
+
+    getRepository(...args: unknown[]): unknown {
+      throw new Error('Method not implemented.');
+    }
+
+    getDatabase(): Database {
+      throw new Error('Method not implemented.');
+    }
   }
 
-  getRunMode(): RunMode {
-    throw new Error('Method not implemented.');
+  @Entity()
+  export class ModelEntity {
+    @PrimaryColumn('uuid')
+      modelId: string;
+
+    @Column('uuid')
+      workshopId: string;
+
+    @Column({ unique: true })
+      modelName: string;
+
+    @Column()
+      category: string;
+
+    @Column()
+      images: string;
   }
 
-  getModule(): Module {
-    throw new Error('Method not implemented.');
-  }
+    const dataSourceOptions: SqliteConnectionOptions = {
+      type: 'sqlite',
+      database: ':memory:',
+      entities: [ModelEntity],
+    };
 
-  getLogger(): Logger {
-    throw new Error('Method not implemented.');
-  }
+    const createModelTableSql = `CREATE TABLE IF NOT EXISTS model_entity (
+      modelId UUID PRIMARY KEY,
+      workshopId UUID,
+      modelName TEXT UNIQUE,
+      category TEXT NOT NULL,
+      images TEXT UNIQUE
+  );`;
 
-  getRepository(...args: unknown[]): unknown {
-    throw new Error('Method not implemented.');
-  }
+    export class TestDatabase extends TypeormDatabase {
+      constructor() {
+        super(dataSourceOptions, new ResolverMock());
+      }
 
-  getDatabase(): Database {
-    throw new Error('Method not implemented.');
-  }
-
-  getRealisation(...args: unknown[]): unknown {
-    throw new Error('Method not implemented.');
-  }
+      async init(): Promise<void> {
+        await super.init();
+        const queryRunner = this.createQueryRunner();
+        await queryRunner.startTransaction();
+        await queryRunner.manager.query(createModelTableSql);
+        await queryRunner.commitTransaction();
+        await queryRunner.release();
+      }
+    }
 }

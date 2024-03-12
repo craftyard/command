@@ -7,6 +7,7 @@ import { success } from 'rilata/src/common/result/success';
 import { failure } from 'rilata/src/common/result/failure';
 import { Logger } from 'rilata/src/common/logger/logger';
 import { TypeormDatabase } from 'src/typeorm/database';
+import { storeDispatcher } from 'rilata/src/app/async-store/store-dispatcher';
 import { ModelEntity } from './model.entity';
 
 export class ModelCMDRepository implements ModelCmdRepository {
@@ -49,6 +50,16 @@ export class ModelCMDRepository implements ModelCmdRepository {
     newModel.category = models.category;
 
     await modelRepository.save(newModel);
+
+    const { unitOfWorkId } = storeDispatcher.getStoreOrExepction();
+    if (!unitOfWorkId) {
+      throw await this.logger.error('unit of work id isnt exist', unitOfWorkId);
+    }
+    try {
+      await this.typeormDatabase.getEntityManager(unitOfWorkId).save(ModelEntity);
+    } catch (e) {
+      throw await this.logger.error('db server error by event repository', ModelEntity);
+    }
 
     return success(undefined);
   }
