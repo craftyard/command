@@ -12,7 +12,6 @@ import {
   Column,
   Entity,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { DTO } from 'rilata/src/domain/dto';
 import { ConsoleLogger } from '@nestjs/common';
@@ -20,7 +19,7 @@ import { TokenVerifier } from 'rilata/src/app/jwt/token-verifier.interface';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ModelTypeormTestFixtures {
-  export class ResolverMock implements ModuleResolver {
+  export class ModuleResolverMock implements ModuleResolver {
     getRealisation(...args: unknown[]): unknown {
       throw new Error('Method not implemented.');
     }
@@ -78,6 +77,11 @@ export namespace ModelTypeormTestFixtures {
       entities: [ModelEntity],
     };
 
+    export const typeormDatabase = new TypeormDatabase(
+      dataSourceOptions,
+      new ModelTypeormTestFixtures.ModuleResolverMock(),
+    );
+
     const createModelTableSql = `CREATE TABLE IF NOT EXISTS model_entity (
       modelId UUID PRIMARY KEY,
       workshopId UUID,
@@ -88,7 +92,7 @@ export namespace ModelTypeormTestFixtures {
 
     export class TestDatabase extends TypeormDatabase {
       constructor() {
-        super(dataSourceOptions, new ResolverMock());
+        super(dataSourceOptions, new ModuleResolverMock());
       }
 
       async init(): Promise<void> {
