@@ -7,7 +7,6 @@ import { Database } from 'rilata/src/app/database/database';
 import { Module } from 'rilata/src/app/module/module';
 import { RunMode } from 'rilata/src/app/types';
 import { Logger } from 'rilata/src/common/logger/logger';
-import { TypeormDatabase } from 'src/typeorm/database';
 import {
   Column,
   Entity,
@@ -16,6 +15,7 @@ import {
 import { DTO } from 'rilata/src/domain/dto';
 import { ConsoleLogger } from '@nestjs/common';
 import { TokenVerifier } from 'rilata/src/app/jwt/token-verifier.interface';
+import { TypeormDatabase } from '../../src/typeorm/database';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ModelTypeormTestFixtures {

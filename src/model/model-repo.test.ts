@@ -2,21 +2,16 @@ import {
   describe,
   expect,
   test,
-  beforeAll,
-  beforeEach,
-  afterEach,
 } from 'bun:test';
 import { AddModelDomainCommand } from 'cy-domain/src/model/domain-data/model/add-model/a-params';
 import { DomainUser } from 'rilata/src/app/caller';
-import { ModuleResolverMock, typeormDatabase } from 'src/model/fixtures';
+import { ModelTypeormTestFixtures as fixtures} from 'src/model/fixtures';
 import { ModelEntity } from 'src/model/model.entity';
 import { ModelCMDRepository } from 'src/model/model.repo';
 import { ModelFactory } from 'cy-domain/src/model/domain-object/model/factory';
 import { ConsoleLogger } from 'rilata/src/common/logger/console-logger';
-import { storeDispatcher } from 'rilata/src/app/async-store/store-dispatcher';
-import { StorePayload } from 'rilata/src/app/async-store/types';
 
-const modelCmdRepo = new ModelCMDRepository(typeormDatabase, new ConsoleLogger());
+const modelCmdRepo = new ModelCMDRepository(fixtures.typeormDatabase, new ConsoleLogger());
 // let globalUnitOfWorkId: string;
 // modelCmdRepo = new ModelCMDRepository(typeormDatabase, new ConsoleLogger());
 
@@ -78,7 +73,7 @@ describe('ModelCMDRepository tests', () => {
     test('success, модель успешно добавлен', async () => {
       console.log('Hello3');
       await modelCmdRepo.addModel(modelAr);
-      const modelEntity = await typeormDatabase.createEntityManager()
+      const modelEntity = await fixtures.typeormDatabase.createEntityManager()
         .find(ModelEntity, { where: { modelName: 'Стол ЛИННМОН/АДИЛЬС 60х100 белый' } && { workshopId: 'a46f5705-2d5e-4de0-bf9d-fa573444100c' } });
       expect(modelEntity.length).toBe(1);
     });
